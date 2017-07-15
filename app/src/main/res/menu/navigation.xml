@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/host"
+        android:icon="@drawable/host"
+        android:title="host" />
+    <item
+        android:id="@+id/msg"
+        android:icon="@drawable/msg"
+        android:title="message" />
+    <item
+        android:id="@+id/add"
+        android:icon="@drawable/tab_home_add"
+        android:title="add" />
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/search"
+        android:title="search"/>
+    <item
+        android:id="@+id/me"
+        android:icon="@drawable/account"
+        android:title="me" />
+</menu>
