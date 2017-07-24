@@ -75,7 +75,7 @@ public class MsgFragment extends Fragment {
 //        tv.setText(agrs1);
 //        return view;
 
-        return inflater.inflate(R.layout.fragment_msg, container, false);
+        return inflater.inflate(R.layout.weibo_item, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

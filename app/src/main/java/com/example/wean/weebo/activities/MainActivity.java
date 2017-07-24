@@ -1,6 +1,8 @@
 package com.example.wean.weebo.activities;
 
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -18,9 +20,11 @@ import com.example.wean.weebo.fragments.UserFragment;
 import com.example.wean.weebo.utils.BottomNavigationViewHelper;
 
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
+    private FragmentManager manager;
+    private FragmentTransaction transaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +33,9 @@ public class MainActivity extends AppCompatActivity{
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
-        bottomNavigationView.getMenu().getItem(1).setChecked(true);
+        bottomNavigationView.getMenu().getItem(0).setChecked(true);
         changeFragment(new InfoFragment());
-
+        sendcode();
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -63,5 +67,14 @@ public class MainActivity extends AppCompatActivity{
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.tb, fragment)
                 .commit();
+    }
+
+    private void sendcode() {
+        String access_token = getIntent().getStringExtra("access_token");
+        InfoFragment infoFragment = new InfoFragment();
+        Bundle args = new Bundle();
+        args.putString("access_token", access_token);
+        infoFragment.setArguments(args);
+
     }
 }

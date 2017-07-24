@@ -7,10 +7,12 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.wean.weebo.R;
+import com.example.wean.weebo.fragments.InfoFragment;
 
 public class LoginActivity extends AppCompatActivity {
 
     private Button button;
+    private static boolean flag=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +24,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, OAuthActivity.class);
-                startActivity(intent);
-                LoginActivity.this.finish();
+                flag=intent.getBooleanExtra("flag",false);
+
+                if (!flag){
+                    startActivity(intent);
+                    LoginActivity.this.finish();
+                }else {
+                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                    LoginActivity.this.finish();
+                }
             }
         });
     }
