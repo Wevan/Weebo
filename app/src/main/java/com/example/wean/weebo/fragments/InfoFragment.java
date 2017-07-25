@@ -6,16 +6,23 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.LogWriter;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.example.wean.weebo.R;
+import com.example.wean.weebo.activities.MainActivity;
+import com.example.wean.weebo.activities.OAuthActivity;
 import com.example.wean.weebo.adapter.WeiboAdapter;
 import com.example.wean.weebo.gson.Statuses;
 import com.example.wean.weebo.gson.Weibo;
@@ -23,9 +30,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -46,7 +56,7 @@ public class InfoFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final int UPDATE_WEIBO = 1;
-
+    private static final String TAG = "InfoFragment";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -55,8 +65,8 @@ public class InfoFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private WeiboAdapter adapter;
-    private List<Statuses> weibolist;
-    private FrameLayout frameLayout;
+    private List<Statuses> weibolist = new ArrayList<>();
+    private RecyclerView recyclerView;
 
     public InfoFragment() {
         // Required empty public constructor
@@ -90,7 +100,8 @@ public class InfoFragment extends Fragment {
             access_token = getArguments().getString("access_token");
             System.out.println("Fragement接受到的acode：" + access_token);
         }
-        System.out.println("函数返回" + weibolist.size());
+//        getWeibo();
+
     }
 
     @Override
@@ -98,12 +109,8 @@ public class InfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_info, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        getWeibo();
-        adapter = new WeiboAdapter(weibolist);
-        recyclerView.setAdapter(adapter);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+
         return view;
     }
 
@@ -137,31 +144,39 @@ public class InfoFragment extends Fragment {
 
     public void getWeibo() {
 
-        new Thread(new Runnable() {
+
+        OkHttpClient client = new OkHttpClient();
+        access_token = "https://api.weibo.com/2/statuses/public_timeline.json?access_token="+access_token;
+        Request request = new Request.Builder()
+                .url(access_token)
+                .build();
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
 
             @Override
-            public void run() {
-                try {
-                    OkHttpClient client = new OkHttpClient();
-                    access_token = "https://api.weibo.com/2/statuses/public_timeline.json?access_token=" + access_token;
-                    Request request = new Request.Builder()
-                            .url(access_token)
-                            .build();
-                    Response response = client.newCall(request).execute();
-                    String responseData = response.body().string();
-                    System.out.println("微博" + responseData);
-//                    weibolist=parseJSONWithGson(responseData);
-                    Message message = new Message();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("jsonData", responseData);
-                    message.setData(bundle);
-                    handler.sendMessage(message);
+            public void onResponse(Call call, final Response response) throws IOException {
+                getActivity().runOnUiThread(new Runnable() {
+                    final String responesText = response.body().string();
+                    Gson gson = new Gson();
+                    Weibo weibo = gson.fromJson(responesText, Weibo.class);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    @Override
+                    public void run() {
+                        Log.w(TAG, "run: response is "+responesText );
+
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                        recyclerView.setLayoutManager(layoutManager);
+                        adapter = new WeiboAdapter(weibo.getStatuses());
+                        recyclerView.setAdapter(adapter);
+
+                    }
+                });
             }
-        }).start();
+        });
 
     }
 
@@ -171,13 +186,14 @@ public class InfoFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            Gson gson = new Gson();
-            Bundle bundle = new Bundle();
-            String jsonData = bundle.getString("jsonData");
-            List<Statuses> statuses = gson.fromJson(jsonData, new TypeToken<List<Statuses>>() {
-            }.getType());
-            weibolist = statuses;
+
         }
     };
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getWeibo();
+
+    }
 }

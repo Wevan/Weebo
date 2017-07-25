@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class User {
-    private int id;
+    private long id;
 
     private String idstr;
 
@@ -127,10 +127,10 @@ public class User {
 
     private int story_read_state;
 
-    public void setId(int id){
+    public void setId(long id){
         this.id = id;
     }
-    public int getId(){
+    public long getId(){
         return this.id;
     }
     public void setIdstr(String idstr){

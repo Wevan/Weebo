@@ -123,6 +123,7 @@ public class OAuthActivity extends AppCompatActivity {
                             Gson gson = new Gson();
                             token = gson.fromJson(responseData, Token.class);
                             final String access_token=token.getAccess_token();
+                            System.out.println("Oaooo:"+access_token);
                             System.out.println("response data:"+responseData);
                             JSONObject object = null;
                             try {

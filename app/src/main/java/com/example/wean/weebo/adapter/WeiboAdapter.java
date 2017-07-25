@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.wean.weebo.R;
 import com.example.wean.weebo.gson.Statuses;
+import com.example.wean.weebo.gson.User;
 
 import java.util.List;
 
@@ -67,7 +68,13 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Statuses statuses1=statuses.get(position);
-        Glide.with(context).load(statuses1.getId()).into(holder.user_icon);
+        Glide.with(context).load(R.drawable.adv).into(holder.user_icon);
+        holder.weibo_content.setText(statuses1.getText().toString());
+        User user=statuses1.getUser();
+        holder.user_name.setText(user.getScreen_name());
+        holder.weibo_time.setText(statuses1.getCreated_at());
+
+
     }
 
     @Override

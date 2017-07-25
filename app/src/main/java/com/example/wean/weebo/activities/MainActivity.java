@@ -64,17 +64,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void changeFragment(Fragment fragment) {
+        String access_token = getIntent().getStringExtra("access_token");
+        System.out.println("在Main里："+ access_token);
+        Bundle args = new Bundle();
+        args.putString("access_token", access_token);
+        fragment.setArguments(args);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.tb, fragment)
                 .commit();
     }
 
     private void sendcode() {
-        String access_token = getIntent().getStringExtra("access_token");
-        InfoFragment infoFragment = new InfoFragment();
-        Bundle args = new Bundle();
-        args.putString("access_token", access_token);
-        infoFragment.setArguments(args);
+
 
     }
 }

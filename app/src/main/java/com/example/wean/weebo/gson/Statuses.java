@@ -9,7 +9,7 @@ import java.util.List;
 public class Statuses {
     private String created_at;
 
-    private int id;
+    private long id;
 
     private String mid;
 
@@ -35,7 +35,7 @@ public class Statuses {
 
     private List<Pic_urls> pic_urls;
 
-    private String geo;
+   // private String geo;
 
     private User user;
 
@@ -55,9 +55,9 @@ public class Statuses {
 
     private Visible visible;
 
-    private int biz_feature;
+    private long biz_feature;
 
-    private int hasActionTypeCard;
+    private long hasActionTypeCard;
 
     private List<Darwin_tags> darwin_tags;
 
@@ -85,11 +85,11 @@ public class Statuses {
         return this.created_at;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public int getId() {
+    public long getId() {
         return this.id;
     }
 
@@ -189,13 +189,13 @@ public class Statuses {
         return this.pic_urls;
     }
 
-    public void setGeo(String geo) {
-        this.geo = geo;
-    }
-
-    public String getGeo() {
-        return this.geo;
-    }
+//    public void setGeo(String geo) {
+//        this.geo = geo;
+//    }
+//
+//    public String getGeo() {
+//        return this.geo;
+//    }
 
     public void setUser(User user) {
         this.user = user;
@@ -269,19 +269,19 @@ public class Statuses {
         return this.visible;
     }
 
-    public void setBiz_feature(int biz_feature) {
+    public void setBiz_feature(long biz_feature) {
         this.biz_feature = biz_feature;
     }
 
-    public int getBiz_feature() {
+    public long getBiz_feature() {
         return this.biz_feature;
     }
 
-    public void setHasActionTypeCard(int hasActionTypeCard) {
+    public void setHasActionTypeCard(long hasActionTypeCard) {
         this.hasActionTypeCard = hasActionTypeCard;
     }
 
-    public int getHasActionTypeCard() {
+    public long getHasActionTypeCard() {
         return this.hasActionTypeCard;
     }
 
