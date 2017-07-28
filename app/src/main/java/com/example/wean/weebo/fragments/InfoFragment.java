@@ -1,45 +1,33 @@
 package com.example.wean.weebo.fragments;
 
-import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.LogWriter;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.example.wean.weebo.R;
-import com.example.wean.weebo.activities.MainActivity;
-import com.example.wean.weebo.activities.OAuthActivity;
 import com.example.wean.weebo.adapter.WeiboAdapter;
 import com.example.wean.weebo.gson.Statuses;
 import com.example.wean.weebo.gson.Weibo;
+import com.example.wean.weebo.utils.Image;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -67,6 +55,8 @@ public class InfoFragment extends Fragment {
     private WeiboAdapter adapter;
     private List<Statuses> weibolist = new ArrayList<>();
     private RecyclerView recyclerView;
+    private List<List<Image>> imagesList;
+    private String[][] images=new String[][]{};
 
     public InfoFragment() {
         // Required empty public constructor
@@ -146,7 +136,7 @@ public class InfoFragment extends Fragment {
 
 
         OkHttpClient client = new OkHttpClient();
-        access_token = "https://api.weibo.com/2/statuses/public_timeline.json?access_token="+access_token;
+        access_token = "https://api.weibo.com/2/statuses/home_timeline.json?access_token="+access_token;
         Request request = new Request.Builder()
                 .url(access_token)
                 .build();
@@ -194,6 +184,7 @@ public class InfoFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getWeibo();
+
 
     }
 }

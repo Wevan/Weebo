@@ -9,7 +9,7 @@ import java.util.List;
 public class Retweeted_status {
     private String created_at;
 
-    private int id;
+    private long id;
 
     private String mid;
 
@@ -53,11 +53,11 @@ public class Retweeted_status {
 
     private Visible visible;
 
-    private List<Biz_ids> biz_ids ;
+    private List<Long> biz_ids ;
 
-    private int biz_feature;
+    private long biz_feature;
 
-    private int hasActionTypeCard;
+    private long hasActionTypeCard;
 
     private List<Darwin_tags> darwin_tags ;
 
@@ -81,10 +81,10 @@ public class Retweeted_status {
     public String getCreated_at(){
         return this.created_at;
     }
-    public void setId(int id){
+    public void setId(long id){
         this.id = id;
     }
-    public int getId(){
+    public long getId(){
         return this.id;
     }
     public void setMid(String mid){
@@ -213,22 +213,22 @@ public class Retweeted_status {
     public Visible getVisible(){
         return this.visible;
     }
-    public void setBiz_ids(List<Biz_ids> biz_ids){
+    public void setBiz_ids(List<Long> biz_ids){
         this.biz_ids = biz_ids;
     }
-    public List<Biz_ids> getBiz_ids(){
+    public List<Long> getBiz_ids(){
         return this.biz_ids;
     }
-    public void setBiz_feature(int biz_feature){
+    public void setBiz_feature(long biz_feature){
         this.biz_feature = biz_feature;
     }
-    public int getBiz_feature(){
+    public long getBiz_feature(){
         return this.biz_feature;
     }
-    public void setHasActionTypeCard(int hasActionTypeCard){
+    public void setHasActionTypeCard(long hasActionTypeCard){
         this.hasActionTypeCard = hasActionTypeCard;
     }
-    public int getHasActionTypeCard(){
+    public long getHasActionTypeCard(){
         return this.hasActionTypeCard;
     }
     public void setDarwin_tags(List<Darwin_tags> darwin_tags){
