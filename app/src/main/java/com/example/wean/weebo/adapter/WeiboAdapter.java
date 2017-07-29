@@ -1,9 +1,13 @@
 package com.example.wean.weebo.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +21,18 @@ import com.example.wean.weebo.gson.Pic_urls;
 import com.example.wean.weebo.gson.Statuses;
 import com.example.wean.weebo.gson.User;
 import com.example.wean.weebo.utils.Image;
-import com.example.wean.weebo.utils.ImageAapter;
+import com.squareup.picasso.Picasso;
+import com.w4lle.library.NineGridAdapter;
 import com.w4lle.library.NineGridlayout;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+
+import static android.content.ContentValues.TAG;
+
 
 /**
  * Created by Wean on 2017/7/21.
@@ -62,8 +71,9 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
         }
     }
 
-    public WeiboAdapter(List<Statuses> mstatuses){
-        statuses=mstatuses;
+    public WeiboAdapter(List<Statuses> mstatuses, List<List<Image>> datalist) {
+        statuses = mstatuses;
+        imagesList = datalist;
     }
 
     @Override
@@ -83,141 +93,75 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
         User user=statuses1.getUser();
         holder.user_name.setText(user.getScreen_name());
         holder.weibo_time.setText(statuses1.getCreated_at());
-        List<Pic_urls> list=statuses1.getPic_urls();
-        List<Image> itemList=new List<Image>() {
-            @Override
-            public int size() {
-                return 0;
+        List<Pic_urls> list = statuses1.getPic_urls();
+        System.out.println("Pic list:"+list.size());
+        imagesList=new ArrayList<>();
+        for (int i = 0; i < statuses.size(); i++) {
+            ArrayList<Image> templist=new ArrayList<>();
+            for (int j = 0; j < list.size(); j++) {
+                Image image=new Image(list.get(j).getThumbnail_pic(),45,45);
+                templist.add(image);
             }
-
-            @Override
-            public boolean isEmpty() {
-                return false;
-            }
-
-            @Override
-            public boolean contains(Object o) {
-                return false;
-            }
-
-            @NonNull
-            @Override
-            public Iterator<Image> iterator() {
-                return null;
-            }
-
-            @NonNull
-            @Override
-            public Object[] toArray() {
-                return new Object[0];
-            }
-
-            @NonNull
-            @Override
-            public <T> T[] toArray(@NonNull T[] a) {
-                return null;
-            }
-
-            @Override
-            public boolean add(Image image) {
-                return false;
-            }
-
-            @Override
-            public boolean remove(Object o) {
-                return false;
-            }
-
-            @Override
-            public boolean containsAll(@NonNull Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public boolean addAll(@NonNull Collection<? extends Image> c) {
-                return false;
-            }
-
-            @Override
-            public boolean addAll(int index, @NonNull Collection<? extends Image> c) {
-                return false;
-            }
-
-            @Override
-            public boolean removeAll(@NonNull Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public boolean retainAll(@NonNull Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public void clear() {
-
-            }
-
-            @Override
-            public Image get(int index) {
-                return null;
-            }
-
-            @Override
-            public Image set(int index, Image element) {
-                return null;
-            }
-
-            @Override
-            public void add(int index, Image element) {
-
-            }
-
-            @Override
-            public Image remove(int index) {
-                return null;
-            }
-
-            @Override
-            public int indexOf(Object o) {
-                return 0;
-            }
-
-            @Override
-            public int lastIndexOf(Object o) {
-                return 0;
-            }
-
-            @Override
-            public ListIterator<Image> listIterator() {
-                return null;
-            }
-
-            @NonNull
-            @Override
-            public ListIterator<Image> listIterator(int index) {
-                return null;
-            }
-
-            @NonNull
-            @Override
-            public List<Image> subList(int fromIndex, int toIndex) {
-                return null;
-            }
-        };
-        if (list.size()!=0){
-            for (int i = 0; i <list.size() ; i++) {
-                Image image=new Image(list.get(i).getThumbnail_pic(),45,45);
-                itemList.add(image);
-            }
-            imagesList.add(itemList);
+            imagesList.add(templist);
         }
-
-        holder.pic.setAdapter(new ImageAapter(context,imagesList));
+        Log.w(TAG, "onBindViewHolder: "+imagesList );
+        List<Image> itemList = imagesList.get(position);
+        if (itemList.isEmpty() || itemList.isEmpty()) {
+            holder.pic.setVisibility(View.GONE);
+        } else {
+            holder.pic.setVisibility(View.VISIBLE);
+            holder.pic.setAdapter(new Adapter(context, imagesList));
+        }
     }
 
     @Override
     public int getItemCount() {
         return statuses.size();
+    }
+
+
+    class Adapter extends NineGridAdapter {
+
+        public Adapter(Context context, List list) {
+            super(context, list);
+        }
+
+        @Override
+        public int getCount() {
+            return (list == null) ? 0 : list.size();
+        }
+
+        @Override
+        public String getUrl(int position) {
+            return getItem(position) == null ? null : ((Image) getItem(position)).getUrl();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return (list == null) ? null : list.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int i, View view) {
+            ImageView iv = null;
+            if (view != null && view instanceof ImageView) {
+                iv = (ImageView) view;
+            } else {
+                iv = new ImageView(context);
+            }
+            iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            iv.setBackgroundColor(context.getResources().getColor((android.R.color.transparent)));
+            String url = getUrl(i);
+            Picasso.with(context).load(getUrl(i)).placeholder(new ColorDrawable(Color.parseColor("#f5f5f5"))).into(iv);
+            if (!TextUtils.isEmpty(url)) {
+                iv.setTag(url);
+            }
+            return iv;
+        }
     }
 }

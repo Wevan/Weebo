@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.example.wean.weebo.R;
 import com.example.wean.weebo.adapter.WeiboAdapter;
+import com.example.wean.weebo.gson.Pic_urls;
 import com.example.wean.weebo.gson.Statuses;
 import com.example.wean.weebo.gson.Weibo;
 import com.example.wean.weebo.utils.Image;
@@ -56,7 +57,19 @@ public class InfoFragment extends Fragment {
     private List<Statuses> weibolist = new ArrayList<>();
     private RecyclerView recyclerView;
     private List<List<Image>> imagesList;
-    private String[][] images=new String[][]{};
+    private List<Pic_urls> itemList;
+
+    private String[][] images = new String[][]{
+            {"file:///android_asset/img2.jpg", "250", "250"}
+            , {"http://img3.douban.com/view/photo/photo/public/p2249526036.jpg", "640", "960"}
+            , {"file:///android_asset/img3.jpg", "250", "250"}
+            , {"file:///android_asset/img4.jpg", "250", "250"}
+            , {"file:///android_asset/img5.jpg", "250", "250"}
+            , {"file:///android_asset/img6.jpg", "250", "250"}
+            , {"file:///android_asset/img7.jpg", "250", "250"}
+            , {"file:///android_asset/img8.jpg", "250", "250"}
+            , {"file:///android_asset/img8.jpg", "250", "250"}
+    };
 
     public InfoFragment() {
         // Required empty public constructor
@@ -90,7 +103,6 @@ public class InfoFragment extends Fragment {
             access_token = getArguments().getString("access_token");
             System.out.println("Fragement接受到的acode：" + access_token);
         }
-//        getWeibo();
 
     }
 
@@ -133,8 +145,6 @@ public class InfoFragment extends Fragment {
     }
 
     public void getWeibo() {
-
-
         OkHttpClient client = new OkHttpClient();
         access_token = "https://api.weibo.com/2/statuses/home_timeline.json?access_token="+access_token;
         Request request = new Request.Builder()
@@ -160,9 +170,13 @@ public class InfoFragment extends Fragment {
 
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                         recyclerView.setLayoutManager(layoutManager);
-                        adapter = new WeiboAdapter(weibo.getStatuses());
-                        recyclerView.setAdapter(adapter);
+//                        initData();
+                        List<Statuses> list=weibo.getStatuses();
 
+
+                        adapter = new WeiboAdapter(weibo.getStatuses(), imagesList);
+                        recyclerView.setAdapter(adapter);
+                        Log.w(TAG, "run: "+imagesList );
                     }
                 });
             }
@@ -186,5 +200,22 @@ public class InfoFragment extends Fragment {
         getWeibo();
 
 
+    }
+
+
+    private void initData() {
+        imagesList=new ArrayList<>();
+        //这里单独添加一条单条的测试数据，用来测试单张的时候横竖图片的效果
+        ArrayList<Image> singleList=new ArrayList<>();
+        singleList.add(new Image(images[8][0],Integer.parseInt(images[8][1]),Integer.parseInt(images[8][2])));
+        imagesList.add(singleList);
+        //从一到9生成9条朋友圈内容，分别是1~9张图片
+        for(int i=0;i<9;i++){
+            ArrayList<Image> itemList=new ArrayList<>();
+            for(int j=0;j<=i;j++){
+                itemList.add(new Image(images[j][0],Integer.parseInt(images[j][1]),Integer.parseInt(images[j][2])));
+            }
+            imagesList.add(itemList);
+        }
     }
 }
