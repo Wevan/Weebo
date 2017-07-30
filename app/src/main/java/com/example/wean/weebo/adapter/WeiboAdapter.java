@@ -42,9 +42,9 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
 
     private Context context;
     private List<Statuses> statuses;
-    private  List<List<Image>> imagesList;
+    private List<List<Image>> imagesList;
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         ImageView user_icon;
         TextView user_name;
@@ -58,16 +58,16 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
 
         public ViewHolder(View itemView) {
             super(itemView);
-            cardView= (CardView) itemView;
-            user_icon= (ImageView) itemView.findViewById(R.id.user_image);
-            user_name= (TextView) itemView.findViewById(R.id.user_name);
-            weibo_time= (TextView) itemView.findViewById(R.id.time_weibo);
-            weibo_content= (TextView) itemView.findViewById(R.id.weibo_content);
-            forward= (ImageButton) itemView.findViewById(R.id.resend);
-            comment= (ImageButton) itemView.findViewById(R.id.comment);
-            like= (ImageButton) itemView.findViewById(R.id.like);
-            more= (ImageButton) itemView.findViewById(R.id.more_user);
-            pic= (NineGridlayout) itemView.findViewById(R.id.iv_ngrid_layout);
+            cardView = (CardView) itemView;
+            user_icon = (ImageView) itemView.findViewById(R.id.user_image);
+            user_name = (TextView) itemView.findViewById(R.id.user_name);
+            weibo_time = (TextView) itemView.findViewById(R.id.time_weibo);
+            weibo_content = (TextView) itemView.findViewById(R.id.weibo_content);
+            forward = (ImageButton) itemView.findViewById(R.id.resend);
+            comment = (ImageButton) itemView.findViewById(R.id.comment);
+            like = (ImageButton) itemView.findViewById(R.id.like);
+            more = (ImageButton) itemView.findViewById(R.id.more_user);
+            pic = (NineGridlayout) itemView.findViewById(R.id.iv_ngrid_layout);
         }
     }
 
@@ -78,39 +78,35 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (context==null){
-            context=parent.getContext();
+        if (context == null) {
+            context = parent.getContext();
         }
-        View view= LayoutInflater.from(context).inflate(R.layout.weibo_item,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.weibo_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Statuses statuses1=statuses.get(position);
-        Glide.with(context).load(R.drawable.adv).into(holder.user_icon);
+        Statuses statuses1 = statuses.get(position);
+        Glide.with(context).load(statuses1.getUser().getAvatar_hd()).into(holder.user_icon);
         holder.weibo_content.setText(statuses1.getText().toString());
-        User user=statuses1.getUser();
+        User user = statuses1.getUser();
         holder.user_name.setText(user.getScreen_name());
         holder.weibo_time.setText(statuses1.getCreated_at());
-        List<Pic_urls> list = statuses1.getPic_urls();
-        System.out.println("Pic list:"+list.size());
-        imagesList=new ArrayList<>();
-        for (int i = 0; i < statuses.size(); i++) {
-            ArrayList<Image> templist=new ArrayList<>();
-            for (int j = 0; j < list.size(); j++) {
-                Image image=new Image(list.get(j).getThumbnail_pic(),45,45);
-                templist.add(image);
-            }
-            imagesList.add(templist);
+        List<Pic_urls> piclist = statuses1.getPic_urls();
+        System.out.println("Pic list:" + piclist.size());
+
+        List<Image> templist = new ArrayList<>();
+        for (int j = 0; j < piclist.size(); j++) {
+            Image image = new Image(piclist.get(j).getThumbnail_pic(), 45, 45);
+            templist.add(image);
         }
-        Log.w(TAG, "onBindViewHolder: "+imagesList );
-        List<Image> itemList = imagesList.get(position);
-        if (itemList.isEmpty() || itemList.isEmpty()) {
+
+        if (templist.isEmpty()) {
             holder.pic.setVisibility(View.GONE);
         } else {
             holder.pic.setVisibility(View.VISIBLE);
-            holder.pic.setAdapter(new Adapter(context, imagesList));
+            holder.pic.setAdapter(new Adapter(context, templist));
         }
     }
 
@@ -122,7 +118,7 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
 
     class Adapter extends NineGridAdapter {
 
-        public Adapter(Context context, List list) {
+        public Adapter(Context context, List<Image> list) {
             super(context, list);
         }
 
