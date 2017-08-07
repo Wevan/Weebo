@@ -4,6 +4,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wean.weebo.R;
+import com.example.wean.weebo.adapter.MsgAdapter;
+import com.example.wean.weebo.adapter.WeiboAdapter;
+import com.example.wean.weebo.gson.Statuses;
+import com.example.wean.weebo.gson.Weibo;
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +46,9 @@ public class MsgFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private RecyclerView recyclerView;
+    private MsgAdapter adapter;
 
     private OnFragmentInteractionListener mListener;
 
@@ -74,8 +94,10 @@ public class MsgFragment extends Fragment {
 //        TextView tv = (TextView)view.findViewById(R.id.tmsg);
 //        tv.setText(agrs1);
 //        return view;
+        View view = inflater.inflate(R.layout.fragment_msg, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.msg_view);
 
-        return inflater.inflate(R.layout.weibo_item, container, false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -107,4 +129,41 @@ public class MsgFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    public void getWeibo() {
+        OkHttpClient client = new OkHttpClient();
+//        access_token = "https://api.weibo.com/2/statuses/home_timeline.json?access_token=" + access_token;
+        Request request = new Request.Builder()
+//                .url(access_token)
+                .build();
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                getActivity().runOnUiThread(new Runnable() {
+                    final String responesText = response.body().string();
+                    Gson gson = new Gson();
+                    Weibo weibo = gson.fromJson(responesText, Weibo.class);
+
+                    @Override
+                    public void run() {
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                        recyclerView.setLayoutManager(layoutManager);
+                        List<Statuses> list = weibo.getStatuses();
+
+
+//                        adapter = new WeiboAdapter(weibo.getStatuses());
+
+                    }
+                });
+            }
+        });
+
+    }
+
 }

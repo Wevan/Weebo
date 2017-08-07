@@ -112,11 +112,13 @@
             android:paddingTop="4dp"
             android:paddingBottom="4dp">
 
-            <ImageButton
+            <Button
                 android:id="@+id/resend"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:background="@drawable/forw"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="2"
+                android:background="@color/colorW"
                 android:layout_marginRight="45dp"
                 />
             <View
@@ -124,23 +126,28 @@
                 android:layout_width="1dp"
                 android:layout_height="wrap_content"
                 android:background="@color/colorMindGary" />
-            <ImageButton
+            <Button
                 android:id="@+id/comment"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="3"
+                android:background="@color/colorW"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:background="@drawable/comment"
+
                 />
             <View
                 android:layout_width="1dp"
                 android:layout_height="wrap_content"
                 android:background="@color/colorMindGary" />
-            <ImageButton
+            <Button
                 android:id="@+id/like"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/like"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="4"
+                android:background="@color/colorW"
                 android:paddingTop="3dp"
                 android:layout_marginLeft="50dp" />
         </LinearLayout>

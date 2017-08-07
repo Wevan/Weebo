@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorGary">#767676</color>
+    <color name="colorW">#ffffff</color>
+    <color name="colorMindY">#f1f1f1</color>
     <color name="colorMindGary">#c6c6c6</color>
 
 </resources>

@@ -1,29 +1,47 @@
 package com.example.wean.weebo.fragments;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.wean.weebo.R;
+import com.example.wean.weebo.activities.MainActivity;
 import com.example.wean.weebo.adapter.WeiboAdapter;
 import com.example.wean.weebo.gson.Pic_urls;
 import com.example.wean.weebo.gson.Statuses;
 import com.example.wean.weebo.gson.Weibo;
 import com.example.wean.weebo.utils.Image;
 import com.google.gson.Gson;
+import com.wingsofts.byeburgernavigationview.ByeBurgerBehavior;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -39,7 +57,7 @@ import okhttp3.Response;
  * Use the {@link InfoFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class InfoFragment extends Fragment {
+public class InfoFragment extends Fragment implements MainActivity.MyOnTouchListener, GestureDetector.OnGestureListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -58,18 +76,13 @@ public class InfoFragment extends Fragment {
     private RecyclerView recyclerView;
     private List<List<Image>> imagesList;
     private List<Pic_urls> itemList;
+    private BottomNavigationView navigationView;
 
-    private String[][] images = new String[][]{
-            {"file:///android_asset/img2.jpg", "250", "250"}
-            , {"http://img3.douban.com/view/photo/photo/public/p2249526036.jpg", "640", "960"}
-            , {"file:///android_asset/img3.jpg", "250", "250"}
-            , {"file:///android_asset/img4.jpg", "250", "250"}
-            , {"file:///android_asset/img5.jpg", "250", "250"}
-            , {"file:///android_asset/img6.jpg", "250", "250"}
-            , {"file:///android_asset/img7.jpg", "250", "250"}
-            , {"file:///android_asset/img8.jpg", "250", "250"}
-            , {"file:///android_asset/img8.jpg", "250", "250"}
-    };
+    private GestureDetector detector;
+
+
+
+
 
     public InfoFragment() {
         // Required empty public constructor
@@ -112,6 +125,23 @@ public class InfoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_info, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        final GestureDetector mGestureDetector = new GestureDetector(
+                getActivity(), this);
+        MainActivity.MyOnTouchListener myOnTouchListener = new MainActivity.MyOnTouchListener() {
+            @Override
+            public boolean onTouch(MotionEvent ev) {
+                boolean result = mGestureDetector.onTouchEvent(ev);
+                return result;
+            }
+
+            @Override
+            public void send(BottomNavigationView view) {
+
+            }
+        };
+
+        ((MainActivity) getActivity())
+                .registerMyOnTouchListener(myOnTouchListener);
 
         return view;
     }
@@ -127,6 +157,58 @@ public class InfoFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        try {
+            if (e1.getY() - e2.getY() < -20) {
+                Toast.makeText(getContext(),"upupup",Toast.LENGTH_SHORT).show();
+                return true;
+            } else if (e1.getY() - e2.getY() > 20) {
+                Toast.makeText(getContext(),"隐藏操作",Toast.LENGTH_SHORT).show();
+                navigationView.setEnabled(false);
+                ByeBurgerBehavior.from(navigationView).hide();
+                return true;
+            }
+        } catch (Exception e) {
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onTouch(MotionEvent ev) {
+        return false;
+    }
+
+    @Override
+    public void send(BottomNavigationView view) {
+        navigationView=view;
     }
 
     /**
@@ -146,9 +228,9 @@ public class InfoFragment extends Fragment {
 
     public void getWeibo() {
         OkHttpClient client = new OkHttpClient();
-        access_token = "https://api.weibo.com/2/statuses/home_timeline.json?access_token="+access_token;
+        String acc="https://api.weibo.com/2/statuses/home_timeline.json?access_token=" + access_token;
         Request request = new Request.Builder()
-                .url(access_token)
+                .url(acc)
                 .build();
         Call call = client.newCall(request);
         call.enqueue(new Callback() {
@@ -166,17 +248,16 @@ public class InfoFragment extends Fragment {
 
                     @Override
                     public void run() {
-                        Log.w(TAG, "run: response is "+responesText );
+                        Log.w(TAG, "run: response is " + responesText);
 
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                         recyclerView.setLayoutManager(layoutManager);
-//                        initData();
-                        List<Statuses> list=weibo.getStatuses();
+//                        List<Statuses> list = weibo.getStatuses();
 
 
-                        adapter = new WeiboAdapter(weibo.getStatuses(), imagesList);
+                        adapter = new WeiboAdapter(weibo.getStatuses(), imagesList,access_token);
                         recyclerView.setAdapter(adapter);
-                        Log.w(TAG, "run: "+imagesList );
+                        Log.w(TAG, "run: " + imagesList);
                     }
                 });
             }
@@ -198,24 +279,13 @@ public class InfoFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getWeibo();
+        MainActivity.Data data = new MainActivity.Data(this);//实例化data类
+        data.sends();//启动发送
 
 
     }
 
 
-    private void initData() {
-        imagesList=new ArrayList<>();
-        //这里单独添加一条单条的测试数据，用来测试单张的时候横竖图片的效果
-        ArrayList<Image> singleList=new ArrayList<>();
-        singleList.add(new Image(images[8][0],Integer.parseInt(images[8][1]),Integer.parseInt(images[8][2])));
-        imagesList.add(singleList);
-        //从一到9生成9条朋友圈内容，分别是1~9张图片
-        for(int i=0;i<9;i++){
-            ArrayList<Image> itemList=new ArrayList<>();
-            for(int j=0;j<=i;j++){
-                itemList.add(new Image(images[j][0],Integer.parseInt(images[j][1]),Integer.parseInt(images[j][2])));
-            }
-            imagesList.add(itemList);
-        }
-    }
+
+
 }

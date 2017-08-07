@@ -37,7 +37,7 @@ public class Retweeted_status {
 
     private List<Pic_urls> pic_urls ;
 
-    private String geo;
+    private Geo geo;
 
     private User user;
 
@@ -165,10 +165,10 @@ public class Retweeted_status {
     public List<Pic_urls> getPic_urls(){
         return this.pic_urls;
     }
-    public void setGeo(String geo){
+    public void setGeo(Geo geo){
         this.geo = geo;
     }
-    public String getGeo(){
+    public Geo getGeo(){
         return this.geo;
     }
     public void setUser(User user){

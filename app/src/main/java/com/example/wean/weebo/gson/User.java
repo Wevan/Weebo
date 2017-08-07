@@ -236,14 +236,14 @@ public class User {
     public void setFollowers_count(int followers_count){
         this.followers_count = followers_count;
     }
-    public int getFollowers_count(){
-        return this.followers_count;
+    public String getFollowers_count(){
+        return String.valueOf(this.followers_count);
     }
     public void setFriends_count(int friends_count){
         this.friends_count = friends_count;
     }
-    public int getFriends_count(){
-        return this.friends_count;
+    public String getFriends_count(){
+        return String.valueOf(this.friends_count);
     }
     public void setPagefriends_count(int pagefriends_count){
         this.pagefriends_count = pagefriends_count;
@@ -254,8 +254,8 @@ public class User {
     public void setStatuses_count(int statuses_count){
         this.statuses_count = statuses_count;
     }
-    public int getStatuses_count(){
-        return this.statuses_count;
+    public String getStatuses_count(){
+        return String.valueOf(this.statuses_count);
     }
     public void setFavourites_count(int favourites_count){
         this.favourites_count = favourites_count;

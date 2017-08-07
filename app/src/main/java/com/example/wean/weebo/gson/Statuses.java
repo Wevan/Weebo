@@ -35,7 +35,7 @@ public class Statuses {
 
     private List<Pic_urls> pic_urls;
 
-   // private String geo;
+    private Geo geo;
 
     private User user;
 
@@ -189,13 +189,13 @@ public class Statuses {
         return this.pic_urls;
     }
 
-//    public void setGeo(String geo) {
-//        this.geo = geo;
-//    }
-//
-//    public String getGeo() {
-//        return this.geo;
-//    }
+    public void setGeo(Geo geo) {
+        this.geo = geo;
+    }
+
+    public Geo getGeo() {
+        return this.geo;
+    }
 
     public void setUser(User user) {
         this.user = user;
@@ -225,24 +225,24 @@ public class Statuses {
         this.reposts_count = reposts_count;
     }
 
-    public int getReposts_count() {
-        return this.reposts_count;
+    public String getReposts_count() {
+        return String.valueOf(this.reposts_count);
     }
 
     public void setComments_count(int comments_count) {
         this.comments_count = comments_count;
     }
 
-    public int getComments_count() {
-        return this.comments_count;
+    public String getComments_count() {
+        return String.valueOf(this.comments_count);
     }
 
     public void setAttitudes_count(int attitudes_count) {
         this.attitudes_count = attitudes_count;
     }
 
-    public int getAttitudes_count() {
-        return this.attitudes_count;
+    public String getAttitudes_count() {
+        return String.valueOf(this.attitudes_count);
     }
 
     public void setIsLongText(boolean isLongText) {

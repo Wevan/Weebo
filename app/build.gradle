@@ -23,6 +23,13 @@ android {
     }
 }
 
+allprojects {
+    repositories {
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -43,6 +50,8 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.w4lle.library:NineLayout:1.0.0'
+    compile 'com.github.githubwing:ByeBurger:1.2.3'
+
 
     testCompile 'junit:junit:4.12'
 }
