@@ -188,10 +188,10 @@ public class InfoFragment extends Fragment implements MainActivity.MyOnTouchList
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         try {
             if (e1.getY() - e2.getY() < -20) {
-                Toast.makeText(getContext(),"upupup",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(),"upupup",Toast.LENGTH_SHORT).show();
                 return true;
             } else if (e1.getY() - e2.getY() > 20) {
-                Toast.makeText(getContext(),"隐藏操作",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(),"隐藏操作",Toast.LENGTH_SHORT).show();
                 navigationView.setEnabled(false);
                 ByeBurgerBehavior.from(navigationView).hide();
                 return true;

@@ -68,9 +68,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void changeFragment(Fragment fragment) {
         String access_token = getIntent().getStringExtra("access_token");
+        String uid=getIntent().getStringExtra("uid");
         System.out.println("在Main里：" + access_token);
         Bundle args = new Bundle();
         args.putString("access_token", access_token);
+        args.putString("uid",uid);
         fragment.setArguments(args);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.tb, fragment)

@@ -123,6 +123,7 @@ public class OAuthActivity extends AppCompatActivity {
                             Gson gson = new Gson();
                             token = gson.fromJson(responseData, Token.class);
                             final String access_token=token.getAccess_token();
+                            final String uid=token.getUid();
                             System.out.println("Oaooo:"+access_token);
                             System.out.println("response data:"+responseData);
                             JSONObject object = null;
@@ -144,6 +145,7 @@ public class OAuthActivity extends AppCompatActivity {
                                     intent.setClass(OAuthActivity.this, MainActivity.class);
                                     intent.putExtra("flag",flag);
                                     intent.putExtra("access_token",access_token);
+                                    intent.putExtra("uid",uid);
                                     startActivity(intent);
                                     OAuthActivity.this.finish();
                                 }

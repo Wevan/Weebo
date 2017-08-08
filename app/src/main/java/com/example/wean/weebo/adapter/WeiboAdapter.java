@@ -285,7 +285,8 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
 
                 int start = matcher.start(3);
                 int end = start + emoji.length();
-                int ResId = EmotionUtils.getImgByName(emoji);
+                EmotionUtils emotionUtils=new EmotionUtils();
+                int ResId = emotionUtils.getImgByName(emoji);
                 Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), ResId);
                 if (bitmap != null) {
                     // 获取字符的大小

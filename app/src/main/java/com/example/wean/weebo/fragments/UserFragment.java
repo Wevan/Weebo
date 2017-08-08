@@ -48,6 +48,7 @@ public class UserFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private String access_token;
+    private String uid;
 
     private RecyclerView recyclerView;
     private WeiboAdapter adapter;
@@ -92,6 +93,7 @@ public class UserFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
             access_token = getArguments().getString("access_token");
+            uid=getArguments().getString("uid");
             System.out.println("UserFragement接受到的acode：" + access_token);
         }
         
@@ -144,7 +146,7 @@ public class UserFragment extends Fragment {
     public void getUserInfo(){
         OkHttpClient client = new OkHttpClient();
         String url2="https://api.weibo.com/2/statuses/user_timeline.json?access_token="+access_token;
-        access_token = "https://api.weibo.com/2/users/show.json?access_token=" + access_token;
+        access_token = "https://api.weibo.com/2/users/show.json?access_token=" + access_token+"&uid="+uid;
         Request request = new Request.Builder()
                 .url(access_token)
                 .build();
