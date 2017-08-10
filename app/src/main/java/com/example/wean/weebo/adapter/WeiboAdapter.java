@@ -1,6 +1,7 @@
 package com.example.wean.weebo.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -29,6 +30,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.wean.weebo.R;
+import com.example.wean.weebo.activities.CommentActivity;
+import com.example.wean.weebo.fragments.InfoFragment;
 import com.example.wean.weebo.gson.Pic_urls;
 import com.example.wean.weebo.gson.Statuses;
 import com.example.wean.weebo.gson.User;
@@ -67,6 +70,7 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
     private static final String REGEX="("+AT+")|"+"("+TOPIC+")|"+"("+EMOJI+")|"+"("+URL+")";
 
     private static String access_token;
+    private static String id;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
@@ -79,9 +83,11 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
         Button like;
         ImageButton more;
         NineGridlayout pic;
+        View commentView;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            commentView=itemView;
             cardView = (CardView) itemView;
             user_icon = (ImageView) itemView.findViewById(R.id.user_image);
             user_name = (TextView) itemView.findViewById(R.id.user_name);
@@ -108,7 +114,22 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
             context = parent.getContext();
         }
         View view = LayoutInflater.from(context).inflate(R.layout.weibo_item, parent, false);
-        return new ViewHolder(view);
+        final ViewHolder holder=new ViewHolder(view);
+        holder.comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position=holder.getAdapterPosition();
+                Statuses statuses2=statuses.get(position);
+                Intent intentsend=new Intent(v.getContext(), CommentActivity.class);
+                intentsend.putExtra("access_token",access_token);
+                intentsend.putExtra("id",id);
+                System.out.println("就是这个id啦"+id);
+                v.getContext().startActivity(intentsend);
+                Toast.makeText(v.getContext(),"点击！"+position,Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return holder;
     }
 
     @Override
@@ -120,6 +141,7 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
         contents=getWeiBoContent(context,contents,holder.weibo_content);
         holder.weibo_content.setText(contents);
 
+        id= String.valueOf(statuses1.getId());
 
         User user = statuses1.getUser();
         holder.user_name.setText(user.getScreen_name());
@@ -130,8 +152,6 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
 
         List<Pic_urls> piclist = statuses1.getPic_urls();
         System.out.println("Pic list:" + piclist.size());
-
-
 
         List<Image> templist = new ArrayList<>();
         for (int j = 0; j < piclist.size(); j++) {
@@ -145,6 +165,8 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
             holder.pic.setVisibility(View.VISIBLE);
             holder.pic.setAdapter(new Adapter(context, templist));
         }
+
+
     }
 
     @Override

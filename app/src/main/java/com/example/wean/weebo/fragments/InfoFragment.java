@@ -1,6 +1,7 @@
 package com.example.wean.weebo.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wean.weebo.R;
+import com.example.wean.weebo.activities.CommentActivity;
 import com.example.wean.weebo.activities.MainActivity;
 import com.example.wean.weebo.adapter.WeiboAdapter;
 import com.example.wean.weebo.gson.Pic_urls;
@@ -150,6 +152,7 @@ public class InfoFragment extends Fragment implements MainActivity.MyOnTouchList
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
+
         }
     }
 
@@ -281,7 +284,6 @@ public class InfoFragment extends Fragment implements MainActivity.MyOnTouchList
         getWeibo();
         MainActivity.Data data = new MainActivity.Data(this);//实例化data类
         data.sends();//启动发送
-
 
     }
 

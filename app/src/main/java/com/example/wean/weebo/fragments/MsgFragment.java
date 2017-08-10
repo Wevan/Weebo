@@ -1,21 +1,16 @@
 package com.example.wean.weebo.fragments;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.wean.weebo.R;
-import com.example.wean.weebo.adapter.MsgAdapter;
-import com.example.wean.weebo.adapter.WeiboAdapter;
+import com.example.wean.weebo.adapter.CommentAdapter;
 import com.example.wean.weebo.gson.Statuses;
 import com.example.wean.weebo.gson.Weibo;
 import com.google.gson.Gson;
@@ -48,7 +43,7 @@ public class MsgFragment extends Fragment {
     private String mParam2;
 
     private RecyclerView recyclerView;
-    private MsgAdapter adapter;
+    private CommentAdapter adapter;
 
     private OnFragmentInteractionListener mListener;
 

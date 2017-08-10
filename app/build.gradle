@@ -36,6 +36,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.sina.weibo.sdk:core:2.0.3:openDefaultRelease@aar'
+
+
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:25.3.1'
@@ -51,7 +53,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.w4lle.library:NineLayout:1.0.0'
     compile 'com.github.githubwing:ByeBurger:1.2.3'
-
-
     testCompile 'junit:junit:4.12'
 }
