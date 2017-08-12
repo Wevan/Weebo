@@ -8,4 +8,10 @@
     <color name="colorMindY">#f1f1f1</color>
     <color name="colorMindGary">#c6c6c6</color>
 
+
+    <color name="reply_button_disable">#f5f5f5</color>
+    <color name="reply_button_text">#dfFFFFFF</color>
+    <color name="reply_button_text_disable">#b8b8b8</color>
+    <color name="white">#FFFFFF</color>
+    <color name="text_primary">#df000000</color>
 </resources>

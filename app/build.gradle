@@ -53,5 +53,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.w4lle.library:NineLayout:1.0.0'
     compile 'com.github.githubwing:ByeBurger:1.2.3'
+    compile 'com.github.dss886:Android-EmotionInputDetector:v0.2.0'
+    compile 'com.tb.emoji:yykEmoji:1.0.0'
     testCompile 'junit:junit:4.12'
 }
