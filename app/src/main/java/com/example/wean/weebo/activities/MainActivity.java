@@ -47,7 +47,10 @@ public class MainActivity extends AppCompatActivity {
                         changeFragment(new MsgFragment());
                         break;
                     case R.id.add:
-                        startActivity(new Intent(MainActivity.this,AddActivity.class));
+                        Intent intents=new Intent(MainActivity.this,AddActivity.class);
+                        String access_token = getIntent().getStringExtra("access_token");
+                        intents.putExtra("access_token",access_token);
+                        startActivity(intents);
                         break;
                     case R.id.search:
                         changeFragment(new FindFragment());
